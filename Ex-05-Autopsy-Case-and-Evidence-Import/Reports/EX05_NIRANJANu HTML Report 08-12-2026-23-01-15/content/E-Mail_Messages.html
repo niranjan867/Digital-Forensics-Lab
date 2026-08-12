@@ -1,0 +1,215 @@
+<html>
+<head>
+	<title>E-Mail Messages</title>
+	<link rel="stylesheet" type="text/css" href="index.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<body>
+<div id="header">E-Mail Messages</div>
+<div id="content">
+<table>
+<thead>
+	<tr>
+		<th>E-Mail To</th>
+		<th>E-Mail From</th>
+		<th>Subject</th>
+		<th>Date Sent</th>
+		<th>Date Received</th>
+		<th>Path</th>
+		<th>E-Mail CC</th>
+		<th>E-Mail BCC</th>
+		<th>Message ID</th>
+		<th>Headers</th>
+		<th>Message (Plaintext)</th>
+		<th>Thread ID</th>
+		<th>Tags</th>
+	</tr>
+</thead>
+	<tr>
+		<td>schemers@Stanford.EDU;</td>
+		<td>IVERSEN@VSFYS1.FI.UIB.NO;</td>
+		<td>FPING under VMS</td>
+		<td>1992-07-27 21:24:17 IST</td>
+		<td>1992-07-27 21:24:17 IST</td>
+		<td>README.VMS</td>
+		<td></td>
+		<td></td>
+		<td>Not available</td>
+		<td>-----HEADERS-----
+
+eceived: from Argus.Stanford.EDU by jessica.stanford.edu (5.59/25-eef) id AA28695; Mon, 27 Jul 92 08:54:22 PDT
+Received: from vsfys1.fi.uib.no by Argus.Stanford.EDU (5.65/inc-1.0)	id AA28942; Mon, 27 Jul 92 08:54:19 -0700
+Date:    Mon, 27 Jul 1992 17:54:17 +0200
+From: IVERSEN@VSFYS1.FI.UIB.NO (Per Steinar Iversen, Dept. of Physics, Univ. of Bergen, Norway, phone +47-5-212770)
+Message-Id: &lt;920727175417.21e004ce@VSFYS1.FI.UIB.NO&gt;
+Subject: FPING under VMS
+To: schemers@Stanford.EDU
+X-Vmsmail-To: SMTP%&quot;schemers@Stanford.EDU&quot;
+Status: OR
+
+---END HEADERS--</td>
+		<td>Hello,
+
+I rather liked your recently posted fping, and I decided to port it to VMS,
+under MultiNet TCP/IP 3.0H and VAXC 3.2. Only some very minor modifications are
+necessary to run it under VMS 5.5: 
+
+1) The 2 following lines must be put onto one single line, otherwise VAXC 
+complains:
+
+#if !__STDC__ &amp;&amp; !defined(__cplusplus) &amp;&amp; !defined(FUNCPROTO) \
+                                                 &amp;&amp; !defined(_POSIX_SOURCE)
+
+goes to:
+
+#if !__STDC__ &amp;&amp; !defined(__cplusplus) &amp;&amp; !defined(FUNCPROTO) &amp;&amp; !defined(_POSIX_SOURCE)
+
+2) The single following line must be changed:
+
+extern char *sys_errlist[];
+
+to:
+
+#ifndef VMS
+extern char *sys_errlist[];
+#else
+extern noshare char *sys_errlist[];
+#endif
+
+3) VMS runs privileged programs in a different manner from UNIX. geteuid is 
+&quot;supported&quot; by VAXC but the result is not really meaningful.
+
+These lines are thus Unix specific:
+
+  /* check if we are root */
+
+#ifndef VMS
+  if (geteuid()) {
+      fprintf(stderr,
+        &quot;This program can only be run by root, or it must be setuid root.\n&quot;);
+      exit(3);
+  }
+#endif
+
+4) VAXC does not support getopt. I got my copies of getopt, index and rindex
+from a fileserver with bsd-sources, using anonymous FTP. These routines
+compiled without complaints and works fine under VAXC 3.2 at least. 
+
+5) The VMS concept of exit codes is different from the Unix version. After some
+thought I decided to short circuit the VAXC attempt of translating the Unix
+return codes into VMS style return codes. My version of FPING always returns
+&quot;exit(1)&quot;, which is VMS success. However the FPING status codes are put into a
+VMS symbol, FPING_STATUS. It is thus very easy to use the FPING return status
+codes for further action if needed. 
+
+The line at the end of main in FPING, &quot;return 0;&quot;, must be changed to
+&quot;exit(0);&quot; for VMS, this should be OK for Unix too?
+
+A small routine is needed to handle the translation, it will probably not
+get any rewards for nice C-code (I usually program in Fortran), and it was 
+largely created by copying an example from the VAXC manuals:
+
+/* VMS-EXIT.C */
+#include &lt;ssdef&gt;
+#include &lt;stdio&gt;
+#include &lt;descrip&gt;
+
+int LIB$SET_SYMBOL();
+
+vms_exit (ecode)
+int ecode;
+{
+  int status = 1;
+  static $DESCRIPTOR(fping_name, &quot;FPING_STATUS&quot;);
+  static $DESCRIPTOR(fping_exit_0,&quot;0&quot;);
+  static $DESCRIPTOR(fping_exit_1,&quot;1&quot;);
+  static $DESCRIPTOR(fping_exit_2,&quot;2&quot;);
+  static $DESCRIPTOR(fping_exit_3,&quot;3&quot;);
+  static $DESCRIPTOR(fping_exit_4,&quot;4&quot;);
+  static $DESCRIPTOR(fping_exit_5,&quot;5&quot;);
+
+  switch(ecode) {
+  case 0 :
+    status = LIB$SET_SYMBOL(&amp;fping_name,&amp;fping_exit_0);
+    break;
+  case 1 :
+    status = LIB$SET_SYMBOL(&amp;fping_name,&amp;fping_exit_1);
+    break;
+  case 2 :
+    status = LIB$SET_SYMBOL(&amp;fping_name,&amp;fping_exit_2);
+    break;
+  case 3 :
+    status = LIB$SET_SYMBOL(&amp;fping_name,&amp;fping_exit_3);
+    break;
+  case 4 :
+    status = LIB$SET_SYMBOL(&amp;fping_name,&amp;fping_exit_4);
+    break;
+  default:
+    status = LIB$SET_SYMBOL(&amp;fping_name,&amp;fping_exit_5);
+    break;
+  }
+
+  exit(1);
+
+}
+
+
+6) The following command file (script) was used to compile and link under VMS:
+
+$! VMS-CC-MAKE.COM
+$! 
+$! This compile+link procedure has been tested with VAXC 3.2 and
+$! MultiNet 3.0H.
+$!
+$! NOTE: getopt, index, and rindex are not part of VAXC, however the BSD
+$! versions works fine. They should be available by anonymous FTP
+$! from a number of fileservers.
+$!
+$ define/user arpa             multinet_root:[multinet.include.arpa]
+$ define/user netinet          multinet_root:[multinet.include.netinet]
+$ define/user sys              multinet_root:[multinet.include.sys],sys$library
+$ cc /nolist /define=&quot;exit=vms_exit&quot; fping.c
+$ cc /nolist                         vms-exit.c
+$ cc /nolist                         getopt.c
+$ cc /nolist                         index.c
+$ cc /nolist                         rindex.c
+$ link /nomap/notrace fping,vms-exit,getopt,index,rindex,sys$input/opt
+multinet:multinet_socket_library/share
+sys$share:vaxcrtl/share
+$ delete fping.obj.*,vms-exit.obj.*,getopt.obj.*,index.obj.*,rindex.obj.*
+$ purge  fping.exe
+$ fping :== $'f$environment(&quot;default&quot;)'fping
+
+7) Piping files into fping is not available under VMS, but the &quot;f&quot; option does
+the same job.
+
+8) fping must be installed with privileges if it is to be used by
+non-privileged users under VMS. 
+
+The question then is, does it work? Well, as far I can see the answer is yes!
+Here are some examples of output:
+
+$ fping xxx
+xxx address not found
+$ show symbol fping_status
+  FPING_STATUS = &quot;2&quot;
+$ fping vxcrna.cern.ch
+vxcrna.cern.ch is alive
+$ show symbol fping_status
+  FPING_STATUS = &quot;0&quot;
+$ fping -de vxcrna.cern.ch
+vxcrna.cern.ch is alive (320 msec)
+$ show symbol fping_status
+  FPING_STATUS = &quot;0&quot;
+$ fping -v
+vsfys5$dkb100:[scratch.iversen]fping.exe;7: $Revision: 1.17 $ $Date: 1992/07/23 03:29:42 $
+vsfys5$dkb100:[scratch.iversen]fping.exe;7: comments to schemers@Stanford.EDU
+
+Regards, Per (iversen@vsfys1.fi.uib.no)</td>
+		<td>97a04f6a-51f1-46dc-ae93-c7e210717159</td>
+		<td></td>
+	</tr>
+</table>
+</div>
+</body>
+</html>
