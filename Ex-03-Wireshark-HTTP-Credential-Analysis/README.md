@@ -98,6 +98,6 @@ This experiment demonstrated the security risk of transmitting login information
 
 **Digital Forensics Laboratory**
 
-Made for authorized cybersecurity education and practical learning.
+213CSE4307 - DIGITAL FORENSICS
 
 </div>

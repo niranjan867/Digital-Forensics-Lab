@@ -215,6 +215,6 @@ The acquired disk image produced matching **MD5** and **SHA1** values during ver
 
 **Digital Forensics Laboratory**
 
-Made for authorized cybersecurity education and practical learning.
+213CSE4307 - DIGITAL FORENSICS
 
 </div>
