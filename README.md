@@ -19,11 +19,11 @@
 | No. | Experiment | Status |
 |:---:|---|:---:|
 | 01 | Evidence Acquisition Using AccessData FTK Imager | [View →](./Ex-01-FTK-Imager-Evidence-Acquisition) |
-| 02 | Recover Deleted or Damaged Files Using TestDisk | | [View →](./Ex-02-Recover-Deleted-or-Damaged-Files-Using-TestDisk) |
+| 02 | Recover Deleted or Damaged Files Using TestDisk | [View →](./Ex-02-Recover-Deleted-or-Damaged-Files-Using-TestDisk) |
 | 03 | Password Capturing and HTTP Credential Analysis Using Wireshark | [View →](./Ex-03-Wireshark-HTTP-Credential-Analysis) |
 | 04 | Analyze Email Headers and Detect Email Spoofing Using MHA | [View →](./Ex-04-Analyze-Email-Headers-and-Detect-Email-Spoofing-Using-MHA) |
 | 05 | Create a Case and Import Evidence Using Autopsy | [View →](./Ex-05-Autopsy-Case-and-Evidence-Import) |
-| 06 | Analyze Digital Evidence Using Sleuth Kit | | 
+| 06 | Analyze Digital Evidence Using Sleuth Kit | |
 | 07 | Extract Data from an Android Device Using AFLogical OSE | |
 | 08 | Detect Hidden Data in Images Using StegExpose | |
 | 09 | Identify Suspicious Processes Using Process Explorer | |
