@@ -24,9 +24,9 @@
 | 04 | Analyze Email Headers and Detect Email Spoofing Using MHA | [View →](./Ex-04-Analyze-Email-Headers-and-Detect-Email-Spoofing-Using-MHA) |
 | 05 | Create a Case and Import Evidence Using Autopsy | [View →](./Ex-05-Autopsy-Case-and-Evidence-Import) |
 | 06 | Analyze Digital Evidence Using Sleuth Kit | [View →](./Ex-06-Digital-Evidence-Analysis-and-File-Recovery-Using-TSK) |
-| 07 | Extract Data from an Android Device Using AFLogical OSE | |
+| 07 | Extract Data from an Android Device Using AFLogical OSE | [View →](./Ex-07-AFLogical-OSE-Android-Data-Extraction) |
 | 08 | Detect Hidden Data in Images Using StegExpose | [View →](./Ex-08-Steganography-Analysis-and-Hidden-Data-Detection-Using-StegExpose) |
-| 09 | Identify Suspicious Processes Using Process Explorer | |
+| 09 | Identify Suspicious Processes Using Process Explorer | [View →](./Ex-09-Suspicious-Process-Identification-Using-Process-Explorer) |
 | 10 | Disassemble and Analyze Malware Using Ghidra | |
 
 ---
