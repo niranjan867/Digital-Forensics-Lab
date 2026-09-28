@@ -27,7 +27,7 @@
 | 07 | Extract Data from an Android Device Using AFLogical OSE | [View →](./Ex-07-AFLogical-OSE-Android-Data-Extraction) |
 | 08 | Detect Hidden Data in Images Using StegExpose | [View →](./Ex-08-Steganography-Analysis-and-Hidden-Data-Detection-Using-StegExpose) |
 | 09 | Identify Suspicious Processes Using Process Explorer | [View →](./Ex-09-Suspicious-Process-Identification-Using-Process-Explorer) |
-| 10 | Disassemble and Analyze Malware Using Ghidra | |
+| 10 | Disassemble and Analyze Malware Using Ghidra | [View →](./Ex-10-Malware-Disassembly-and-Code-Analysis-Using-Ghidra) |
 
 ---
 
